@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Today's Reflection — Hôm nay, mình thế nào?</title>
+<style>
+:root{--purple:#7955b5;--deep:#493575;--bg:#f8f6fc;--ink:#29243a;--muted:#89849b;--line:#ece7f4;--white:#fff;--pink:#fbe9f0;--green:#e5f5ec}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;transition:.2s}
+button:hover{filter:brightness(.96);transform:translateY(-1px)}
+.app{max-width:1250px;margin:auto;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 5%;background:#fff;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:800;color:var(--deep)}
+.brand-icon{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,#8b69c8,#e8a5bd);display:grid;place-items:center;color:white;font-size:23px}
+.brand small{display:block;font-size:11px;letter-spacing:2px;color:var(--muted);font-weight:500}
+.date{font-size:13px;color:var(--muted);text-align:right}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:25px;padding:26px 3%}
+aside{align-self:start;background:white;border:1px solid var(--line);border-radius:20px;padding:14px;position:sticky;top:18px}
+.nav{width:100%;border:0;background:transparent;text-align:left;padding:12px;border-radius:12px;color:#777187;margin:3px 0;font-size:14px}
+.nav.active{background:#f0e9fb;color:var(--deep);font-weight:700}
+.nav span{display:inline-block;width:28px;font-size:17px}
+.side-note{margin-top:20px;padding:15px;border-radius:14px;background:linear-gradient(145deg,#f4eafa,#fff0e8);font-size:12px;color:#6c5a8b}
+main{min-width:0}
+.page{display:none}.page.active{display:block}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(27px,4vw,40px);line-height:1.2;letter-spacing:-1px}
+h2{font-size:21px;letter-spacing:-.4px}
+h3{font-size:16px}
+.muted{color:var(--muted);font-size:13px}
+.hero{padding:35px;border-radius:24px;background:linear-gradient(115deg,#eee5ff,#fff0e9);position:relative;overflow:hidden;margin-bottom:22px}
+.hero:after{content:"☾";position:absolute;right:35px;top:12px;font-size:105px;color:#fff9;pointer-events:none}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--purple);font-weight:800}
+.hero p{max-width:530px;color:#6d637d}
+.btn{border:0;border-radius:11px;padding:10px 16px;background:var(--purple);color:#fff;font-weight:650;font-size:13px}
+.btn.secondary{background:#f0eafa;color:var(--deep)}
+.btn.light{background:#fff;color:var(--deep);border:1px solid var(--line)}
+.btn.danger{background:#fff0f0;color:#b34b55}
+.btn.small{padding:7px 10px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:24px}
+.card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:21px;min-width:0}
+.card-icon{font-size:27px;margin-bottom:9px}
+.card h3{margin-bottom:7px}
+.card p{font-size:13px;color:#777187}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:28px 0 14px}
+.section-head h2{margin:0}
+.grid-two{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.field{display:block;width:100%;border:1px solid #e3d9f0;border-radius:11px;padding:11px 12px;background:white;color:var(--ink);outline:none;margin:8px 0 13px}
+.field:focus{border-color:var(--purple);box-shadow:0 0 0 3px #7955b51a}
+textarea.field{resize:vertical;min-height:115px}
+label{font-size:13px;font-weight:650}
+.mood-options{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:14px 0}
+.mood{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 2px;color:var(--ink);font-size:12px}
+.mood .emoji{display:block;font-size:24px;margin-bottom:5px}
+.mood.selected{border:2px solid var(--purple);background:#f4edff}
+.progress{height:8px;background:#eee9f4;border-radius:20px;overflow:hidden}
+.progress div{height:100%;background:linear-gradient(90deg,#8865c3,#e5a6be);border-radius:20px;transition:width .3s}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}
+.stat{padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px}
+.stat strong{display:block;font-size:28px;color:var(--deep)}
+.stat span{font-size:12px;color:var(--muted)}
+.entry{padding:16px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
+.entry-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.entry h3{margin:0 0 4px}
+.entry p{font-size:13px;color:#716b80;white-space:pre-wrap;overflow-wrap:anywhere}
+.tag{display:inline-block;background:#f1eafa;color:#6b4a9f;padding:4px 9px;border-radius:20px;font-size:11px;margin:3px}
+.habit-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.habit-row:last-child{border:0}
+.habit-check{width:23px;height:23px;accent-color:var(--purple);flex-shrink:0}
+.habit-name{flex:1;font-weight:650;font-size:14px}
+.habit-name.done{text-decoration:line-through;color:#aaa4b3}
+.chart{height:135px;display:flex;align-items:end;justify-content:space-around;gap:8px;padding-top:15px}
+.bar-wrap{flex:1;text-align:center;font-size:11px;color:var(--muted)}
+.bar{width:min(35px,80%);min-height:5px;margin:0 auto 8px;border-radius:8px 8px 3px 3px;background:linear-gradient(#a88ad7,#7955b5)}
+.notice{padding:13px;border-radius:12px;background:#f1eafa;color:#6b4a9f;font-size:13px;margin-top:12px}
+.empty{text-align:center;padding:25px 8px;color:var(--muted);font-size:13px}
+footer{text-align:center;color:#a19bad;font-size:11px;padding:25px}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.auth{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;place-items:center;padding:20px}.auth.show{display:grid}.auth .card{width:min(400px,100%);padding:28px}.auth .tabs{display:flex;gap:6px;margin-bottom:12px}.auth .err{color:#b34b55;font-size:13px;min-height:20px}.user-box{display:flex;align-items:center;gap:10px;justify-content:flex-end;font-size:13px;color:var(--muted)}.toast{position:fixed;right:20px;bottom:20px;background:#302443;color:#fff;padding:13px 19px;border-radius:12px;box-shadow:0 8px 30px #0002;z-index:9;display:none;font-size:13px}
+@media(max-width:800px){.layout{grid-template-columns:1fr;padding:16px}.layout aside{position:static;overflow-x:auto;display:flex;gap:5px;padding:8px}.nav{white-space:nowrap;width:auto;margin:0;padding:10px}.nav span{width:auto;margin-right:5px}.side-note{display:none}.cards{grid-template-columns:1fr}.grid-two{grid-template-columns:1fr}.hero{padding:25px}.hero:after{right:8px;font-size:70px}.stat-grid{grid-template-columns:repeat(3,1fr)}header{padding:16px 5%}}
+@media(max-width:420px){.mood-options{gap:4px}.mood{font-size:10px;padding:9px 1px}.mood .emoji{font-size:20px}.card{padding:17px}.hero{padding:21px}.stat{padding:12px}.stat strong{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="auth" id="auth"><div class="card">
+  <div class="brand" style="margin-bottom:14px"><div class="brand-icon">☾</div><div>Today's Reflection<small>A MOMENT FOR YOURSELF</small></div></div>
+  <div class="tabs"><button class="btn secondary" id="tabLogin" onclick="authMode('login')">Đăng nhập</button><button class="btn light" id="tabReg" onclick="authMode('register')">Đăng ký</button></div>
+  <label for="authUser">Tên đăng nhập</label><input id="authUser" class="field" autocomplete="username">
+  <label for="authPass">Mật khẩu</label><input id="authPass" class="field" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitAuth()">
+  <div class="err" id="authErr"></div>
+  <button class="btn" id="authBtn" onclick="submitAuth()">Đăng nhập</button>
+  <p class="muted" style="margin:12px 0 0">Dữ liệu được lưu trong cơ sở dữ liệu trên máy chủ và đồng bộ trên mọi thiết bị khi bạn đăng nhập.</p>
+</div></div>
+<div class="app">
+<header>
+  <div class="brand"><div class="brand-icon">☾</div><div>Today's Reflection<small>A MOMENT FOR YOURSELF</small></div></div>
+  <div><div class="date" id="today"></div><div class="user-box"><span id="userName"></span><button class="btn light small" onclick="logout()">Đăng xuất</button></div></div>
+</header>
+<div class="layout">
+<aside>
+  <button class="nav active" data-page="home"><span>⌂</span>Tổng quan</button>
+  <button class="nav" data-page="reflection"><span>☼</span>Daily Reflection</button>
+  <button class="nav" data-page="mood"><span>♡</span>Cảm xúc</button>
+  <button class="nav" data-page="journal"><span>▤</span>Nhật ký</button>
+  <button class="nav" data-page="habits"><span>✳</span>Thói quen</button>
+  <button class="nav" data-page="insights"><span>◷</span>Insights</button>
+  <div class="side-note">“Bạn không cần hoàn hảo. Bạn chỉ cần hiểu mình hơn một chút.”</div>
+</aside>
+<main>
+<section class="page active" id="home">
+  <div class="hero">
+    <div class="eyebrow">YOUR DAILY PAUSE · <span id="heroDate"></span></div>
+    <h1>Hôm nay,<br>mình thế nào?</h1>
+    <p>Dành vài phút lắng nghe bản thân, nhận diện cảm xúc và tìm một điều nhỏ bé để ngày hôm nay trở nên ý nghĩa hơn.</p>
+    <button class="btn" onclick="showPage('reflection')">Bắt đầu nhìn lại →</button>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-icon">☀️</div><h3>Daily Reflection</h3><p>Một góc nhìn nhẹ nhàng để bắt đầu ngày mới.</p><button class="btn secondary" onclick="showPage('reflection')">Khám phá →</button></div>
+    <div class="card"><div class="card-icon">💜</div><h3>Check-in cảm xúc</h3><p>Dừng lại một chút để gọi tên cảm xúc hiện tại.</p><button class="btn secondary" onclick="showPage('mood')">Ghi nhận →</button></div>
+    <div class="card"><div class="card-icon">📖</div><h3>Nhật ký hôm nay</h3><p>Lưu lại những điều đang ở trong tâm trí bạn.</p><button class="btn secondary" onclick="showPage('journal')">Viết nhật ký →</button></div>
+  </div>
+  <div class="section-head"><h2>Hôm nay của bạn</h2><span class="muted">Tiến bộ từ những điều nhỏ</span></div>
+  <div class="stat-grid">
+    <div class="stat"><strong id="homeMood">—</strong><span>Cảm xúc hôm nay</span></div>
+    <div class="stat"><strong id="homeJournal">0</strong><span>Nhật ký đã viết</span></div>
+    <div class="stat"><strong id="homeHabits">0/0</strong><span>Thói quen hoàn thành</span></div>
+  </div>
+  <div class="card"><h3>🌷 Một lời nhắc cho bạn</h3><p>Không phải ngày nào cũng cần tạo ra thành tựu lớn. Đôi khi, nghỉ ngơi đúng lúc cũng là một cách tiến về phía trước.</p></div>
+</section>
+
+<section class="page" id="reflection">
+  <div class="eyebrow">DAILY REFLECTION</div><h1>Một góc nhìn cho hôm nay</h1>
+  <p class="muted">Gợi ý để suy ngẫm, không phải dự đoán chắc chắn về tương lai.</p>
+  <div class="hero"><div class="card-icon">🌤️</div><h2 id="reflectionTitle">Chậm lại để nhìn rõ hơn</h2><p id="reflectionText">Hôm nay, hãy dành sự chú ý cho điều bạn có thể chủ động thay đổi. Bạn không cần giải quyết tất cả cùng một lúc.</p><div class="tag" id="reflectionTag">Năng lượng · Cân bằng</div></div>
+  <div class="grid-two">
+    <div class="card"><div class="card-icon">🌱</div><h3>Điều nên ưu tiên</h3><p id="priority">Chọn một việc quan trọng nhất và hoàn thành từng bước nhỏ.</p></div>
+    <div class="card"><div class="card-icon">🫧</div><h3>Điều nên buông nhẹ</h3><p>Đừng để việc so sánh hành trình của mình với người khác lấy đi sự bình yên hôm nay.</p></div>
+  </div>
+  <div class="card" style="margin-top:17px"><h3>✍️ Câu hỏi dành cho bạn</h3><p id="question">Nếu hôm nay chỉ làm được một điều có ích cho bản thân, bạn muốn đó là điều gì?</p><textarea id="reflectionAnswer" class="field" placeholder="Viết suy nghĩ của bạn tại đây..."></textarea><button class="btn" onclick="saveReflection()">Lưu suy ngẫm</button> <button class="btn light" onclick="newReflection()">Góc nhìn khác ↻</button></div>
+</section>
+
+<section class="page" id="mood">
+  <div class="eyebrow">EMOTIONAL CHECK-IN</div><h1>Bạn đang cảm thấy thế nào?</h1><p class="muted">Không có cảm xúc nào là sai. Hãy chọn điều gần với bạn nhất lúc này.</p>
+  <div class="card"><h3>Cảm xúc hiện tại của bạn</h3>
+    <div class="mood-options" id="moodOptions">
+      <button class="mood" data-mood="Vui vẻ"><span class="emoji">😊</span>Vui vẻ</button>
+      <button class="mood" data-mood="Biết ơn"><span class="emoji">🥰</span>Biết ơn</button>
+      <button class="mood" data-mood="Bình yên"><span class="emoji">😌</span>Bình yên</button>
+      <button class="mood" data-mood="Lo lắng"><span class="emoji">😟</span>Lo lắng</button>
+      <button class="mood" data-mood="Mệt mỏi"><span class="emoji">😔</span>Mệt mỏi</button>
+    </div>
+    <label for="moodNote">Điều gì khiến bạn cảm thấy như vậy?</label><textarea id="moodNote" class="field" placeholder="Bạn có thể chia sẻ hoặc để trống..."></textarea>
+    <button class="btn" onclick="saveMood()">Ghi nhận cảm xúc</button>
+  </div>
+  <div class="section-head"><h2>Lịch sử cảm xúc</h2></div><div class="card" id="moodHistory"></div>
+</section>
+
+<section class="page" id="journal">
+  <div class="eyebrow">PERSONAL JOURNAL</div><h1>Nhật ký của bạn</h1><p class="muted">Một nơi để lưu lại những suy nghĩ mà bạn muốn lắng nghe.</p>
+  <div class="card"><h3 id="journalFormTitle">✍️ Viết một trang mới</h3>
+    <label for="journalTitle">Tiêu đề</label><input id="journalTitle" class="field" placeholder="Ví dụ: Một ngày bình thường nhưng dễ chịu">
+    <label for="journalContent">Hôm nay đã có chuyện gì?</label><textarea id="journalContent" class="field" placeholder="Hôm nay mình đã... Điều mình cảm thấy... Điều mình biết ơn..." style="min-height:150px"></textarea>
+    <label for="journalMood">Cảm xúc đi kèm</label><select id="journalMood" class="field"><option>Vui vẻ</option><option>Biết ơn</option><option>Bình yên</option><option>Lo lắng</option><option>Mệt mỏi</option><option>Hy vọng</option></select>
+    <button class="btn" onclick="saveJournal()">Lưu nhật ký</button> <button class="btn light" id="cancelEdit" style="display:none" onclick="resetJournalForm()">Hủy sửa</button>
+  </div>
+  <div class="section-head"><h2>Những trang đã viết</h2><span class="muted" id="journalCount">0 bài</span></div>
+  <div class="card" id="journalList"></div>
+</section>
+
+<section class="page" id="habits">
+  <div class="eyebrow">SMALL STEPS, BIG CHANGE</div><h1>Thói quen của mình</h1><p class="muted">Mỗi dấu tích là một lần bạn giữ lời hứa với chính mình.</p>
+  <div class="card"><h3>Thêm thói quen mới</h3><input id="habitInput" class="field" placeholder="Ví dụ: Đọc sách 10 phút"><button class="btn" onclick="addHabit()">+ Thêm thói quen</button></div>
+  <div class="section-head"><h2>Danh sách hôm nay</h2><span class="muted" id="habitProgressText">0/0 hoàn thành</span></div>
+  <div class="card"><div class="progress"><div id="habitProgress" style="width:0%"></div></div><div id="habitList" style="margin-top:10px"></div></div>
+</section>
+
+<section class="page" id="insights">
+  <div class="eyebrow">PERSONAL INSIGHTS</div><h1>Nhìn lại hành trình</h1><p class="muted">Những tổng kết dựa trên dữ liệu bạn đã ghi lại trong tài khoản của mình.</p>
+  <div class="stat-grid">
+    <div class="stat"><strong id="insMoodCount">0</strong><span>Lần check-in</span></div>
+    <div class="stat"><strong id="insJournalCount">0</strong><span>Trang nhật ký</span></div>
+    <div class="stat"><strong id="insHabitCount">0%</strong><span>Thói quen hôm nay</span></div>
+  </div>
+  <div class="card"><h3>📊 Cảm xúc trong 7 ngày gần nhất</h3><div class="chart" id="moodChart"></div><p class="muted">Biểu đồ thể hiện số lần ghi nhận cảm xúc mỗi ngày.</p></div>
+  <div class="card" style="margin-top:17px"><h3>💡 Điều dữ liệu đang gợi ý</h3><div id="insightText" class="notice">Hãy bắt đầu check-in cảm xúc và viết nhật ký. Khi có dữ liệu, phần này sẽ tổng kết những gì bạn đã ghi lại.</div></div>
+  <div class="card" style="margin-top:17px"><h3>🔒 Quyền riêng tư</h3><p class="muted">Dữ liệu của bạn được lưu trong cơ sở dữ liệu SQLite trên máy chủ, gắn với tài khoản đăng nhập và chỉ bạn truy cập được. Bạn có thể xóa toàn bộ dữ liệu bất cứ lúc nào.</p><button class="btn danger" onclick="clearData()">Xóa toàn bộ dữ liệu cá nhân</button></div>
+</section>
+</main>
+</div>
+<footer>Today's Reflection · Một khoảnh khắc dành riêng cho bạn ♡</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const todayKey=()=>new Date().toLocaleDateString('sv-SE');
+const dateLabel=d=>new Date(d+'T12:00:00').toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+$('today').textContent=new Date().toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'long'});
+$('heroDate').textContent=new Date().toLocaleDateString('vi-VN',{day:'numeric',month:'long'});
+const defaults=[{id:1,name:'Uống đủ nước',done:[]},{id:2,name:'Vận động 15 phút',done:[]},{id:3,name:'Đọc sách 10 phút',done:[]},{id:4,name:'Viết vài dòng nhật ký',done:[]}];
+let token=localStorage.getItem('tr_token')||'';
+async function api(method,url,body){
+  const r=await fetch(url,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});
+  const data=await r.json().catch(()=>({}));
+  if(r.status===401&&token&&!url.startsWith('/api/login')){setToken('');showAuth()}
+  if(!r.ok)throw new Error(data.error||'Có lỗi xảy ra');
+  return data;
+}
+function setToken(t){token=t;t?localStorage.setItem('tr_token',t):localStorage.removeItem('tr_token')}
+let moods=[],journals=[],habits=[],selectedMood='',editingId=null,reflectionIndex=0,authKind='login';
+const fail=e=>toast(e.message);
+function showAuth(){$('auth').classList.add('show')}
+function authMode(m){authKind=m;$('tabLogin').className='btn '+(m==='login'?'secondary':'light');$('tabReg').className='btn '+(m==='register'?'secondary':'light');$('authBtn').textContent=m==='login'?'Đăng nhập':'Tạo tài khoản';$('authErr').textContent=''}
+async function submitAuth(){
+  try{const d=await api('POST','/api/'+authKind,{username:$('authUser').value,password:$('authPass').value});
+    setToken(d.token);$('authPass').value='';await loadData()}
+  catch(e){$('authErr').textContent=e.message}
+}
+async function loadData(){
+  try{const d=await api('GET','/api/me');moods=d.moods;journals=d.journals;habits=d.habits;
+    $('userName').textContent='👤 '+d.username;$('auth').classList.remove('show');renderAll()}
+  catch(e){showAuth()}
+}
+async function logout(){try{await api('POST','/api/logout')}catch(e){}setToken('');moods=[];journals=[];habits=[];showAuth()}
+const reflections=[
+['Chậm lại để nhìn rõ hơn','Hôm nay, hãy dành sự chú ý cho điều bạn có thể chủ động thay đổi. Bạn không cần giải quyết tất cả cùng một lúc.','Chọn một việc quan trọng nhất và hoàn thành từng bước nhỏ.','Nếu hôm nay chỉ làm được một điều có ích cho bản thân, bạn muốn đó là điều gì?'],
+['Cho phép mình bắt đầu lại','Một khởi đầu nhỏ vẫn có ý nghĩa. Bạn không cần chờ đến khi có đủ động lực mới bắt đầu.','Chọn một việc nhỏ đến mức bạn có thể làm ngay trong 5 phút.','Có điều gì bạn muốn bắt đầu lại với thái độ dịu dàng hơn không?'],
+['Lắng nghe nhu cầu của mình','Đôi khi điều bạn cần không phải cố gắng nhiều hơn, mà là hiểu điều gì đang khiến mình mệt mỏi.','Dành một khoảng nghỉ ngắn và nhận diện nhu cầu thật sự của mình.','Nếu cơ thể và tâm trí có thể nói, chúng sẽ muốn bạn chú ý điều gì?'],
+['Trân trọng những điều đang có','Niềm vui không phải lúc nào cũng đến từ điều lớn lao. Một khoảnh khắc bình yên cũng đáng được ghi nhận.','Tìm một điều nhỏ khiến bạn thấy biết ơn hôm nay.','Khoảnh khắc nào trong ngày khiến bạn cảm thấy dễ chịu hơn?']
+];
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='insights')renderInsights();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2400)}
+async function saveMood(){if(!selectedMood){toast('Bạn hãy chọn một cảm xúc trước nhé.');return}try{const d=await api('POST','/api/moods',{date:todayKey(),mood:selectedMood,note:$('moodNote').value.trim()});moods=d.moods;$('moodNote').value='';selectedMood='';document.querySelectorAll('.mood').forEach(b=>b.classList.remove('selected'));renderAll();toast('Đã ghi nhận cảm xúc của bạn ♡')}catch(e){fail(e)}}
+document.querySelectorAll('.mood').forEach(b=>b.addEventListener('click',()=>{selectedMood=b.dataset.mood;document.querySelectorAll('.mood').forEach(x=>x.classList.toggle('selected',x===b))}));
+async function editMood(id){const m=moods.find(x=>x.id===id);if(!m)return;const note=prompt('Sửa ghi chú cho check-in này:',m.note||'');if(note===null)return;const mood=prompt('Sửa cảm xúc:',m.mood);if(!mood||!mood.trim())return;try{moods=(await api('PUT','/api/moods/'+id,{mood:mood.trim(),note:note.trim()})).moods;renderAll();toast('Đã cập nhật check-in')}catch(e){fail(e)}}
+async function deleteMood(id){if(!confirm('Xóa check-in này?'))return;try{moods=(await api('DELETE','/api/moods/'+id)).moods;renderAll();toast('Đã xóa check-in')}catch(e){fail(e)}}
+async function editHabit(id){const x=habits.find(h=>h.id===id);if(!x)return;const name=prompt('Đổi tên thói quen:',x.name);if(name===null||!name.trim())return;try{habits=(await api('PUT','/api/habits/'+id,{name:name.trim()})).habits;renderAll();toast('Đã cập nhật thói quen')}catch(e){fail(e)}}
+function renderMoods(){$('moodHistory').innerHTML=moods.length?[...moods].reverse().slice(0,15).map(m=>`<div class="entry"><div class="entry-top"><div><strong>${esc(m.mood)}</strong><div class="muted">${dateLabel(m.date)}</div></div><div><button class="btn light small" onclick="editMood(${m.id})">Sửa</button> <button class="btn light small" onclick="deleteMood(${m.id})">Xóa</button></div></div>${m.note?`<p>${esc(m.note)}</p>`:''}</div>`).join(''):'<div class="empty">Chưa có check-in nào. Hãy bắt đầu bằng cách ghi nhận cảm xúc hôm nay.</div>'}
+async function saveJournal(){let title=$('journalTitle').value.trim(),content=$('journalContent').value.trim();if(!content){toast('Hãy viết vài dòng trước khi lưu nhé.');return}const p={title,content,mood:$('journalMood').value,date:todayKey()};try{const d=editingId?await api('PUT','/api/journals/'+editingId,p):await api('POST','/api/journals',p);journals=d.journals;resetJournalForm();renderAll();toast('Đã lưu nhật ký thành công')}catch(e){fail(e)}}
+function editJournal(id){let j=journals.find(x=>x.id===id);if(!j)return;editingId=id;$('journalTitle').value=j.title;$('journalContent').value=j.content;$('journalMood').value=j.mood;$('journalFormTitle').textContent='✍️ Chỉnh sửa nhật ký';$('cancelEdit').style.display='inline-block';showPage('journal');$('journalTitle').focus()}
+function resetJournalForm(){editingId=null;$('journalTitle').value='';$('journalContent').value='';$('journalMood').value='Vui vẻ';$('journalFormTitle').textContent='✍️ Viết một trang mới';$('cancelEdit').style.display='none'}
+async function deleteJournal(id){if(!confirm('Bạn muốn xóa trang nhật ký này?'))return;try{journals=(await api('DELETE','/api/journals/'+id)).journals;renderAll();toast('Đã xóa nhật ký')}catch(e){fail(e)}}
+function renderJournals(){$('journalCount').textContent=journals.length+' bài';$('journalList').innerHTML=journals.length?[...journals].sort((a,b)=>b.id-a.id).map(j=>`<div class="entry"><div class="entry-top"><div><h3>${esc(j.title)}</h3><span class="muted">${dateLabel(j.updated||j.date)}</span> <span class="tag">${esc(j.mood)}</span></div><div style="display:flex;gap:5px"><button class="btn light small" onclick="editJournal(${j.id})">Sửa</button><button class="btn danger small" onclick="deleteJournal(${j.id})">Xóa</button></div></div><p>${esc(j.content)}</p></div>`).join(''):'<div class="empty">📖<br>Nhật ký của bạn sẽ xuất hiện ở đây.<br>Hãy bắt đầu bằng một vài dòng chân thật.</div>'}
+async function addHabit(){let name=$('habitInput').value.trim();if(!name){toast('Nhập tên thói quen trước nhé.');return}try{habits=(await api('POST','/api/habits',{name})).habits;$('habitInput').value='';renderAll();toast('Đã thêm thói quen')}catch(e){fail(e)}}
+async function toggleHabit(id,checked){try{habits=(await api('PUT','/api/habits/'+id+'/log',{date:todayKey(),done:checked})).habits}catch(e){fail(e)}renderAll()}
+async function deleteHabit(id){if(!confirm('Xóa thói quen này?'))return;try{habits=(await api('DELETE','/api/habits/'+id)).habits;renderAll()}catch(e){fail(e)}}
+function renderHabits(){let done=habits.filter(h=>h.done.includes(todayKey())).length,pct=habits.length?Math.round(done/habits.length*100):0;$('habitProgress').style.width=pct+'%';$('habitProgressText').textContent=done+'/'+habits.length+' hoàn thành';$('habitList').innerHTML=habits.length?habits.map(h=>`<div class="habit-row"><input class="habit-check" type="checkbox" ${h.done.includes(todayKey())?'checked':''} onchange="toggleHabit(${h.id},this.checked)"><span class="habit-name ${h.done.includes(todayKey())?'done':''}">${esc(h.name)}</span><button class="btn light small" onclick="editHabit(${h.id})">Sửa</button> <button class="btn light small" onclick="deleteHabit(${h.id})">Xóa</button></div>`).join(''):'<div class="empty">Chưa có thói quen nào. Hãy thêm điều bạn muốn duy trì.</div>'}
+function newReflection(){reflectionIndex=(reflectionIndex+1)%reflections.length;renderReflection()}
+function renderReflection(){let r=reflections[reflectionIndex];$('reflectionTitle').textContent=r[0];$('reflectionText').textContent=r[1];$('priority').textContent=r[2];$('question').textContent=r[3]}
+async function saveReflection(){let a=$('reflectionAnswer').value.trim();if(!a){toast('Viết một vài dòng trước nhé.');return}try{journals=(await api('POST','/api/journals',{title:'Suy ngẫm: '+reflections[reflectionIndex][0],content:a,mood:'Bình yên',date:todayKey()})).journals;$('reflectionAnswer').value='';renderAll();toast('Đã lưu suy ngẫm vào nhật ký')}catch(e){fail(e)}}
+function renderInsights(){let recent=moods.filter(m=>m.date>=new Date(Date.now()-6*86400000).toLocaleDateString('sv-SE'));$('insMoodCount').textContent=moods.length;$('insJournalCount').textContent=journals.length;let done=habits.filter(h=>h.done.includes(todayKey())).length;$('insHabitCount').textContent=(habits.length?Math.round(done/habits.length*100):0)+'%';let days=Array.from({length:7},(_,i)=>{let d=new Date();d.setDate(d.getDate()-6+i);let key=d.toLocaleDateString('sv-SE');return{key,label:d.toLocaleDateString('vi-VN',{weekday:'short'}),count:recent.filter(m=>m.date===key).length}});let max=Math.max(1,...days.map(d=>d.count));$('moodChart').innerHTML=days.map(d=>`<div class="bar-wrap"><div class="bar" style="height:${Math.max(5,d.count/max*90)}px"></div>${d.label}<br>${d.count}</div>`).join('');let counts={};recent.forEach(m=>counts[m.mood]=(counts[m.mood]||0)+1);let top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];let text=recent.length?`Trong 7 ngày gần nhất, bạn đã check-in ${recent.length} lần. `+(top?`Cảm xúc được ghi nhận nhiều nhất là “${top[0]}” (${top[1]} lần). `:'')+'Đây chỉ là thống kê từ những gì bạn đã ghi lại, không phải kết luận về sức khỏe tinh thần.': 'Bạn chưa có đủ dữ liệu check-in trong 7 ngày gần nhất. Hãy ghi nhận cảm xúc mỗi ngày để bắt đầu nhận ra các xu hướng của chính mình.';$('insightText').textContent=text}
+function renderHome(){let todayM=moods.filter(m=>m.date===todayKey()).slice(-1)[0];$('homeMood').textContent=todayM?todayM.mood:'—';$('homeJournal').textContent=journals.filter(j=>j.date===todayKey()||j.updated===todayKey()).length;let done=habits.filter(h=>h.done.includes(todayKey())).length;$('homeHabits').textContent=done+'/'+habits.length}
+function renderAll(){renderMoods();renderJournals();renderHabits();renderHome();renderInsights()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function clearData(){if(!confirm('Xóa toàn bộ nhật ký, cảm xúc và thói quen? Không thể hoàn tác.'))return;try{const d=await api('DELETE','/api/data');moods=d.moods;journals=d.journals;habits=d.habits;renderAll();toast('Đã xóa dữ liệu cá nhân')}catch(e){fail(e)}}
+renderReflection();renderAll();
+if(token)loadData();else showAuth();
+</script>
+</body>
+</html>
