@@ -1,9 +1,0 @@
-{
-  "name": "self-reflection",
-  "version": "2.0.1",
-  "description": "Today's Reflection - ứng dụng nhìn lại bản thân hằng ngày (Node.js + SQLite)",
-  "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=18" },
-  "optionalDependencies": { "better-sqlite3": "^11.5.0" }
-}
